@@ -471,3 +471,46 @@ extension Array: Binding {
     }
 }
 
+// MARK: - Dictionary as JSON Bindings
+
+extension Dictionary: Binding {
+    /// The binding type of a parameter to bind to a statement.
+    public typealias BindingType = String
+
+    /// The binding value representation of the type to be bound to a `Statement`.
+    public var bindingValue: BindingValue {
+        
+        guard let data = try? JSONSerialization.data(withJSONObject: self, options: []),
+              let str = String(data: data, encoding: .utf8)
+        else { return .text("") }
+        return .text(str)
+    }
+
+    /// Converts the binding value `Any` object representation to an equivalent `Date` representation.
+    public static func fromBindingValue(_ value: Any) -> Self? {
+        guard let value = value as? String,
+              let data = value.data(using: .utf8)
+        else { return nil }
+        return (try? JSONSerialization.jsonObject(with: data, options: [])) as? Self
+    }
+}
+
+// MARK: - CodableBinding as JSON Text
+
+extension CodableBinding where BindingType == String {
+    /// The binding value representation of the type to be bound to a `Statement`.
+    public var bindingValue: BindingValue {
+        guard let data = try? JSONEncoder().encode(self),
+              let str = String(data: data, encoding: .utf8)
+        else { return .text("") }
+        return .text(str)
+    }
+
+    /// Converts the binding value `Any` object representation to an equivalent `Self` representation.
+    public static func fromBindingValue(_ value: Any) -> Self? {
+        guard let value = value as? String,
+              let data = value.data(using: .utf8)
+        else { return nil }
+        return try? JSONDecoder().decode(Self.self, from: data)
+    }
+}
