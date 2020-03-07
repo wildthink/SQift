@@ -619,3 +619,26 @@ extension Connection {
         return try prepare(sql).bind(parameters).query(body)
     }
 }
+
+extension Connection {
+    /// Iterates over the rows returned by an SQL query using the specified closure.
+    ///
+    /// This variant of the `fetch` method is useful when it is desirable to process
+    /// each row in sequence.
+    ///
+    ///     let sql = "SELECT name, price, passengers FROM cars"
+    ///
+    ///     try fetch { row in
+    ///         print (row)
+    ///     }
+    ///
+    /// - Parameter body: A closure accepting a Row as an argument.
+    ///
+    /// - Returns: Void
+    ///
+    /// - Throws: A `SQLiteError` if SQLite encounters an error stepping through the statement.
+    public func fetch (_ sql: SQift.SQL, _ parameters: [SQift.Bindable?], _ body: (Row) -> Void) throws {
+        let statement = try prepare(sql, parameters)
+        try statement.fetch(body)
+    }
+}

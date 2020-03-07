@@ -412,6 +412,30 @@ public class Statement {
         return results
     }
 
+    /// Iterates over the rows returned by an SQL query using the specified closure.
+    ///
+    /// This variant of the `fetch` method is useful when it is desirable to process
+    /// each row in sequence.
+    ///
+    ///     let sql = "SELECT name, price, passengers FROM cars"
+    ///
+    ///     try fetch { row in
+    ///         print (row)
+    ///     }
+    ///
+    /// - Parameter body: A closure accepting a Row as an argument.
+    ///
+    /// - Returns: Void
+    ///
+    /// - Throws: A `SQLiteError` if SQLite encounters an error stepping through the statement.
+
+    public func fetch(_ body: (Row) -> Void) throws {
+        while try step() {
+            let row = Row(statement: self)
+            body(row)
+        }
+    }
+
     // MARK: - Internal - Columns
 
     func columnType(at index: Int) -> Int32 {
@@ -432,7 +456,7 @@ public class Statement {
 
     // MARK: - Internal - Step
 
-    func step() throws -> Bool {
+    public func step() throws -> Bool {
         var result = sqlite3_step(handle)
 
         if let delay = connection.tableLockPolicy.intervalInMicroseconds {
