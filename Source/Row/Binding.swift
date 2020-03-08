@@ -449,51 +449,99 @@ public struct DictionaryBinding<Key: Hashable & Codable, Value: Codable>: Codabl
 }
 
 // MARK: - Array as JSON Bindings
-extension Array: Binding {
-    /// The binding type of a parameter to bind to a statement.
-    public typealias BindingType = String
+extension Array: Binding where Element: Encodable, Element: Decodable {
+}
 
+extension Array: Bindable where Element: Decodable, Element: Encodable {
     /// The binding value representation of the type to be bound to a `Statement`.
     public var bindingValue: BindingValue {
-        
-        guard let data = try? JSONSerialization.data(withJSONObject: self, options: []),
+        guard let data = try? JSONEncoder().encode(self),
               let str = String(data: data, encoding: .utf8)
         else { return .text("") }
         return .text(str)
     }
+}
 
-    /// Converts the binding value `Any` object representation to an equivalent `Date` representation.
+extension Array: Extractable where Element: Decodable, Element: Encodable {
+    public typealias BindingType = String
+    
+    /// Converts the binding value `Any` object representation to an equivalent `Self` representation.
     public static func fromBindingValue(_ value: Any) -> Self? {
         guard let value = value as? String,
               let data = value.data(using: .utf8)
         else { return nil }
-        return (try? JSONSerialization.jsonObject(with: data, options: [])) as? Self
+        return try? JSONDecoder().decode(Self.self, from: data)
     }
 }
+
+//extension Array: Binding {
+//    /// The binding type of a parameter to bind to a statement.
+//    public typealias BindingType = String
+//
+//    /// The binding value representation of the type to be bound to a `Statement`.
+//    public var bindingValue: BindingValue {
+//        guard let data = try? JSONSerialization.data(withJSONObject: self, options: []),
+//              let str = String(data: data, encoding: .utf8)
+//        else { return .text("") }
+//        return .text(str)
+//    }
+//
+//    /// Converts the binding value `Any` object representation to an equivalent `Date` representation.
+//    public static func fromBindingValue(_ value: Any) -> Self? {
+//        guard let value = value as? String,
+//              let data = value.data(using: .utf8)
+//        else { return nil }
+//        return (try? JSONSerialization.jsonObject(with: data, options: [])) as? Self
+//    }
+//}
 
 // MARK: - Dictionary as JSON Bindings
+extension Dictionary: Binding where Key: Codable, Value: Codable {
+}
 
-extension Dictionary: Binding {
-    /// The binding type of a parameter to bind to a statement.
-    public typealias BindingType = String
-
+extension Dictionary: Bindable where  Key: Codable, Value: Codable {
     /// The binding value representation of the type to be bound to a `Statement`.
     public var bindingValue: BindingValue {
-        
-        guard let data = try? JSONSerialization.data(withJSONObject: self, options: []),
+        guard let data = try? JSONEncoder().encode(self),
               let str = String(data: data, encoding: .utf8)
         else { return .text("") }
         return .text(str)
     }
+}
 
-    /// Converts the binding value `Any` object representation to an equivalent `Date` representation.
+extension Dictionary: Extractable where  Key: Codable, Value: Codable {
+    public typealias BindingType = String
+    
+    /// Converts the binding value `Any` object representation to an equivalent `Self` representation.
     public static func fromBindingValue(_ value: Any) -> Self? {
         guard let value = value as? String,
               let data = value.data(using: .utf8)
         else { return nil }
-        return (try? JSONSerialization.jsonObject(with: data, options: [])) as? Self
+        return try? JSONDecoder().decode(Self.self, from: data)
     }
 }
+
+//extension Dictionary: Binding {
+//    /// The binding type of a parameter to bind to a statement.
+//    public typealias BindingType = String
+//
+//    /// The binding value representation of the type to be bound to a `Statement`.
+//    public var bindingValue: BindingValue {
+//
+//        guard let data = try? JSONSerialization.data(withJSONObject: self, options: []),
+//              let str = String(data: data, encoding: .utf8)
+//        else { return .text("") }
+//        return .text(str)
+//    }
+//
+//    /// Converts the binding value `Any` object representation to an equivalent `Date` representation.
+//    public static func fromBindingValue(_ value: Any) -> Self? {
+//        guard let value = value as? String,
+//              let data = value.data(using: .utf8)
+//        else { return nil }
+//        return (try? JSONSerialization.jsonObject(with: data, options: [])) as? Self
+//    }
+//}
 
 // MARK: - CodableBinding as JSON Text
 

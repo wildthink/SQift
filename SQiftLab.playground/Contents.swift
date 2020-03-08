@@ -1,6 +1,11 @@
 import Cocoa
 import SQift
 
+// https://news.ycombinator.com/item?id=19277809
+// https://github.com/rgov/sqlite_protobuf
+// https://www.sqlite.org/json1.html#jgrouparray
+// https://gist.github.com/wildthink/287848614e9bc4c984357d3c72d7479d
+
 struct Location: CodableBinding {
     typealias BindingType = String
     var name: String
@@ -10,11 +15,11 @@ let dbc = try Connection(storageLocation: .inMemory)
 
 try dbc.execute("CREATE TABLE cars(id INTEGER PRIMARY KEY, name TEXT, price INTEGER, tags TEXT, location TEXT)")
 
-//let tags = """
-//["one", "two"]
-//"""
-
 let tags = """
+["alpha", "beta"]
+"""
+
+let itags = """
 [1,2,3]
 """
 
@@ -37,14 +42,14 @@ try dbc.execute("INSERT INTO cars (name, price, tags) VALUES('Mercedes', 57127, 
 try dbc.execute("INSERT INTO cars (name, price, tags) VALUES('Ford', 20000, '\(tags)')")
 try dbc.execute("INSERT INTO cars (name, price, tags) VALUES ('Mazda', 25000, '\(tags)')")
 
-
 struct Car: Codable {
     let id: Int64
     let name: String
 //    let type: String
     let price: UInt
-    let tags: [Int]
+    let tags: [AnyCodable]
     let location: Location?
+//    let location: [String:AnyCodable]?
 }
 
 extension Car: ExpressibleByRow {
@@ -53,7 +58,7 @@ extension Car: ExpressibleByRow {
             let id: Int64 = row[0],
             let name: String = row[1],
             let price: UInt = row[2],
-            let tags: [Int] = row[3]
+            let tags: [AnyCodable] = row[3]
             else {
                 throw ExpressibleByRowError(type: Car.self, row: row)
         }
@@ -67,9 +72,9 @@ extension Car: ExpressibleByRow {
 }
 
 let jq_1 = """
-SELECT name
- FROM cars, json_each(cars.tags)
-WHERE json_each.value = 1
+SELECT name, tags.value
+ FROM cars, json_each(cars.tags) as tags
+WHERE tags.value = 1
 """
 
 let jq_2 = """
@@ -82,6 +87,12 @@ SELECT name
 WHERE json_tree.value LIKE 'Bum%'
 """
 
+let jq_4 = """
+SELECT name, json_extract(cars.tags, '$[0]') as jt
+ FROM cars
+WHERE jt = 1
+"""
+
 try dbc.query(jq_1)
 let bname = try dbc.query(jq_2)
 try dbc.fetch(jq_2, []) {
@@ -89,6 +100,7 @@ try dbc.fetch(jq_2, []) {
 }
 
 try dbc.query(jq_3)
+try dbc.query(jq_4)
 //print(#line, bname)
 
 let names: [String] = try dbc.query("SELECT name FROM cars WHERE price >= ?", [20_000])
@@ -134,9 +146,9 @@ let list = ["one", "two"] // [1, 2, 3, 4]
 let bv = bindingValue(value: list)
 let v = fromBinding(bv)
 
-let plist: [String : Any] = ["a": 23, "b": "stirng" ]
+let plist: [String : AnyCodable] = ["a": 23, "b": "stirng" ]
 let pv = plist.bindingValue
 
 if case BindingValue.text(let bv_s) = pv {
-    [String:Any].fromBindingValue(bv_s)
+    [String:AnyCodable].fromBindingValue(bv_s)
 }
