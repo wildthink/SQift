@@ -64,12 +64,12 @@ public class Statement {
 
         var tempHandle: OpaquePointer?
 
-        var result = sqlite3_prepare_v2(connection.handle, sql, -1, &tempHandle, nil)
+        var result = sqlite3_prepare_v2(connection.handle, sql.rawValue, -1, &tempHandle, nil)
 
         if let delay = connection.tableLockPolicy.intervalInMicroseconds {
             while result == SQLITE_LOCKED {
                 usleep(delay)
-                result = sqlite3_prepare_v2(connection.handle, sql, -1, &tempHandle, nil)
+                result = sqlite3_prepare_v2(connection.handle, sql.rawValue, -1, &tempHandle, nil)
             }
         }
 
@@ -414,7 +414,7 @@ public class Statement {
 
     /// Iterates over the rows returned by an SQL query using the specified closure.
     ///
-    /// This variant of the `fetch` method is useful when it is desirable to process
+    /// This  `fetch` method is useful when it is desirable to process
     /// each row in sequence.
     ///
     ///     let sql = "SELECT name, price, passengers FROM cars"

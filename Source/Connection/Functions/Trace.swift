@@ -102,7 +102,7 @@ extension Connection {
                 let sql = String(cString: arg2.assumingMemoryBound(to: CChar.self))
                 let statement = String(cString: sqlite3_expanded_sql(statementOrConnection))
 
-                event = .statement(statement: statement, sql: sql)
+                event = .statement(statement: statement, sql: SQL(sql))
 
             case UInt32(TraceEvent.profileMask):
                 guard

@@ -99,7 +99,7 @@ open class Migrator {
         var totalMigrationsCompleted: UInt64 = 0
 
         for schemaVersion in (currentSchemaVersion + 1)...desiredSchemaVersion {
-            let sql = migrationSQL(schemaVersion)
+            let sql = SQL(migrationSQL(schemaVersion))
 
             willMigrate?(schemaVersion)
 

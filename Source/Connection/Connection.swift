@@ -12,7 +12,36 @@ import Foundation
 import SQLite3
 
 /// Represents a SQL statement to be compiled as a string.
-public typealias SQL = String
+//public typealias SQL = String
+public struct SQL: ExpressibleByStringInterpolation, CustomStringConvertible {
+    var rawValue: String
+    public var description: String { rawValue }
+        
+    public init(_ value: String) {
+        self.rawValue = value
+    }
+    
+//    public init(cString: UnsafePointer<CChar>) {
+//        rawValue = String(cString: cString)
+//    }
+
+    public init(cString: UnsafePointer<Int8>) {
+        rawValue = String(cString: cString)
+    }
+
+    public init(literalCapacity: Int, interpolationCount: Int) {
+        rawValue = ""
+    }
+    
+    public init(stringLiteral value: String) {
+        self.rawValue = value
+    }
+
+    mutating func appendLiteral(_ literal: String) {
+        rawValue.append(literal)
+    }
+}
+
 
 /// The `Connection` class represents a single connection to a SQLite database. 
 ///
@@ -131,12 +160,12 @@ public class Connection {
     ///
     /// - Throws: A `SQLiteError` if SQLite encounters and error when executing the SQL statement.
     public func execute(_ sql: SQL) throws {
-        var result = sqlite3_exec(handle, sql, nil, nil, nil)
+        var result = sqlite3_exec(handle, sql.rawValue, nil, nil, nil)
 
         if let delay = tableLockPolicy.intervalInMicroseconds {
             while result == SQLITE_LOCKED {
                 usleep(delay)
-                result = sqlite3_exec(handle, sql, nil, nil, nil)
+                result = sqlite3_exec(handle, sql.rawValue, nil, nil, nil)
             }
         }
 

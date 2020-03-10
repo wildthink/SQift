@@ -3,10 +3,11 @@ Pod::Spec.new do |s|
   s.version = "5.0.1"
   s.license = "MIT"
   s.summary = "A lightweight Swift wrapper for SQLite."
-  s.homepage = "https://github.com/Nike-Inc/SQift"
+  # s.homepage = "https://github.com/Nike-Inc/SQift"
+  s.homepage = "https://github.com/wildthink/SQift"
   s.authors = { "Dave Camp" => "dave.camp@nike.com", "Christian Noon" => "christian.noon@nike.com" }
 
-  s.source = { :git => "https://github.com/Nike-Inc/SQift.git", :tag => s.version }
+  s.source = { :git => "https://github.com/wildthink/SQift.git", :tag => s.version }
   s.source_files = "Source/**/*.swift"
   s.swift_version = "5.0"
 
