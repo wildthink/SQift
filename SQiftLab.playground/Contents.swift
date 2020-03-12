@@ -161,9 +161,9 @@ try dbc.fetch("select * from pragma_table_info('cars')", []) {
     print ($0)
 }
 
-let db = try Database(storageLocation: .inMemory)
+//let db = try Database(storageLocation: .inMemory)
 //let db = try Database(storageLocation: .onDisk("/Users/jason/demo.db"))
-//let db = try Database(storageLocation: .onDisk("file::memory:?cache=shared"))
+let db = try Database(storageLocation: .sharedMemory("demo"))
 //let db = try Database(storageLocation: .temporary)
 
 try db.executeWrite {
@@ -171,6 +171,7 @@ try db.executeWrite {
 
     try $0.execute("INSERT INTO cars (name, price, tags) VALUES('Audi', 52642, '\(tags)')")
     try $0.execute("INSERT INTO cars (name, price, tags) VALUES('Mercedes', 57127, '\(tags)')")
+    print(#line, "PASS")
 }
 
 try db.executeRead {
