@@ -208,6 +208,13 @@ public struct Row {
     }
 }
 
+// MARK: - Row -> Dictionary
+public extension Row {
+    func dictionary() -> [String:Any] {
+        columns.reduce(into:[:]) { d, row in d[row.name] = row.value }
+    }
+}
+
 // MARK: - Sequence
 
 extension Row: Sequence {

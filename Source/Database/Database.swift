@@ -20,6 +20,9 @@ public class Database {
     /// The reader connection pool used to execute all read operations.
     public var readerConnectionPool: ConnectionPool!
 
+    ///
+    var storageLocation: StorageLocation
+    
     // MARK: - Initialization
 
     /// Creates a `Database` instance with the specified storage location, initialization flags and preparation closures.
@@ -50,6 +53,9 @@ public class Database {
         readerConnectionPreparation: ((Connection) throws -> Void)? = nil)
         throws
     {
+        // jmj
+        self.storageLocation = storageLocation
+        
         let writerConnection = try Connection(
             storageLocation: storageLocation,
             tableLockPolicy: tableLockPolicy,
@@ -96,6 +102,9 @@ public class Database {
         readerConnectionPreparation: ((Connection) throws -> Void)? = nil)
         throws
     {
+        // jmj
+        self.storageLocation = storageLocation
+
         let writerConnection = try Connection(
             storageLocation: storageLocation,
             tableLockPolicy: tableLockPolicy,
@@ -122,8 +131,24 @@ public class Database {
     ///
     /// - Throws: A `SQLiteError` if SQLite encounters an error executing the closure.
     public func executeRead(closure: (Connection) throws -> Void) throws {
-        try readerConnectionPool.execute { connection in
-            try closure(connection)
+        // FIXME: jmj - the .inMemory option
+        // DOES NOT SUPPORT MULTIPLE Connections
+        // By SQLite docs there *should* be a way but we need to find it
+        
+        if storageLocation.path == StorageLocation.inMemory.path {
+            try writerConnectionQueue.execute { connection in
+                // jmj - added transaction
+                try connection.transaction {
+                    try closure(connection)
+                }
+            }
+        } else {
+            try readerConnectionPool.execute { connection in
+                // jmj - added transaction
+                try connection.transaction {
+                    try closure(connection)
+                }
+            }
         }
     }
 
@@ -134,7 +159,10 @@ public class Database {
     /// - Throws: A `SQLiteError` if SQLite encounters an error executing the closure.
     public func executeWrite(closure: (Connection) throws -> Void) throws {
         try writerConnectionQueue.execute { connection in
-            try closure(connection)
+            // jmj - added transaction
+            try connection.transaction {
+                try closure(connection)
+            }
         }
     }
 }

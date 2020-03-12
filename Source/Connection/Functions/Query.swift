@@ -623,7 +623,7 @@ extension Connection {
 extension Connection {
     /// Iterates over the rows returned by an SQL query using the specified closure.
     ///
-    /// This variant of the `fetch` method is useful when it is desirable to process
+    /// This `fetch` method is useful when it is desirable to process
     /// each row in sequence.
     ///
     ///     let sql = "SELECT name, price, passengers FROM cars"
@@ -640,5 +640,53 @@ extension Connection {
     public func fetch (_ sql: SQift.SQL, _ parameters: [SQift.Bindable?], _ body: (Row) -> Void) throws {
         let statement = try prepare(sql, parameters)
         try statement.fetch(body)
+    }
+    
+    /// This method wraps Arrays and Dictionaries as `json` values
+    func sql_quote(_ any: Any) -> String {
+        if let str = any as? String { return "'\(str)'" }
+        if any is [Any] || any is [String:Any],
+            let data = try? JSONSerialization.data(withJSONObject: any, options: []),
+            let str = String(data: data, encoding: .utf8) {
+                return "json('\(str)')"
+        }
+        return String(describing: any)
+    }
+    
+    func sql_format(column name: String) -> String {
+        guard name.starts(with: "$"), name.contains(".") else { return name }
+        let col = name.starts(with: "$") ? String(name.dropFirst()) : name
+        let keys = col.split(separator: ".", maxSplits: 1)
+        return "json_extract(\(keys[0]),'\(keys[1])')"
+    }
+    
+    /// This `insert` method is useful when it is desirable to insert  values
+    /// in a Dictionary. An optional mapping can be provided to rename the keys
+    /// from the dictionary into internal column names. The default is to use the
+    /// keys provided.
+    ///
+    ///
+    /// - Parameter table: The name of the table
+    ///
+    /// - Parameter mapping: Alternate plist key to column names map
+    ///
+    /// - Parameter plist: A Dictionary with values for a record.
+    ///
+    /// - Returns: Void
+    ///
+    /// - Throws: A `SQLiteError` if SQLite encounters an error stepping through the statement.
+
+    public func insert(into table: String, mapping: [String:String] = [:], from plist: [String:Any]) throws {
+        
+        var keys: [String] = []
+        var values: [String] = []
+        
+        for (key, val) in plist {
+            let ckey = mapping[key] ?? key
+            keys.append(ckey)
+            values.append (sql_quote(val))
+        }
+        let sql: SQL = "INSERT INTO \(table) (\(keys.joined(separator: ","))) VALUES(\(values.joined(separator: ",")))"
+        try execute(sql)
     }
 }

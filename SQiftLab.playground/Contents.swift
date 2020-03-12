@@ -6,52 +6,18 @@ import SQift
 // https://www.sqlite.org/json1.html#jgrouparray
 // https://gist.github.com/wildthink/287848614e9bc4c984357d3c72d7479d
 
-/*
-public struct SQL_: ExpressibleByStringInterpolation, CustomStringConvertible {
-    var rawValue: String
-    public var description: String { rawValue }
-        
-    public init(_ value: String) {
-        self.rawValue = value
-    }
-
-    public init(literalCapacity: Int, interpolationCount: Int) {
-        rawValue = ""
-    }
-    
-    public init(stringLiteral value: String) {
-        self.rawValue = value
-    }
-    
-//    public init(stringInterpolation: Self.StringInterpolation) {
-//        self.rawValue = stringInterpolation.rawValue
-//    }
-
-    mutating func appendLiteral(_ literal: String) {
-        rawValue.append(literal)
-    }
-
-    public static func insert (into table: String) -> SQL_ {
-        let sql = "INSERT"
-        return SQL_(sql)
-    }
-
-}
-*/
 
 struct Location: CodableBinding {
     typealias BindingType = String
     var name: String
 }
 
-// let db = try Database(storageLocation: .inMemory, flags: 0)
-
 let dbc = try Connection(storageLocation: .inMemory)
 
-try dbc.execute("CREATE TABLE cars(id INTEGER PRIMARY KEY, name TEXT, price INTEGER, tags TEXT, location TEXT, freq TEXT)")
+try dbc.execute("CREATE TABLE cars(id INTEGER PRIMARY KEY, name TEXT, price INTEGER, tags JSON, location JSON, freq TEXT)")
 
 let tags = """
-["alpha", "beta"]
+["alpha", "beta", 33]
 """
 
 let itags = """
@@ -77,14 +43,15 @@ try dbc.execute("INSERT INTO cars (name, price, tags) VALUES('Mercedes', 57127, 
 try dbc.execute("INSERT INTO cars (name, price, tags) VALUES('Ford', 20000, '\(tags)')")
 try dbc.execute("INSERT INTO cars (name, price, tags, freq) VALUES ('Mazda', 25000, '\(tags)', 'anytime')")
 
-public struct Car: Codable {
+// The struct need NOT be Codable but must be JSON compatible
+public struct Car {
     public enum Frequency: String, Codable, CaseIterable { case once, daily, weekly, anytime }
 
     let id: Int64
     let name: String
 //    let type: String
     let price: UInt
-    let tags: [String] // [AnyCodabe]
+    let tags: [Any] // [AnyCodabe]
     let location: Location?
     let frequency: Frequency?
     
@@ -133,7 +100,7 @@ extension Car: ExpressibleByRow {
 let jq_1: SQL = """
 SELECT name, tags.value
  FROM cars, json_each(cars.tags) as tags
-WHERE tags.value = 1
+WHERE tags.value = 33
 """
 
 let jq_2: SQL = """
@@ -142,14 +109,13 @@ select name, json_extract(cars.location, '$.name') from cars
 
 let jq_3: SQL = """
 SELECT name
- FROM cars, json_tree(cars.location, '$.name')
-WHERE json_tree.value LIKE 'Bum%'
+ FROM cars, json_each(cars.location, '$.name') as loc_name
+WHERE loc_name.value LIKE 'Bum%'
 """
 
 let jq_4: SQL = """
-SELECT name, json_extract(cars.tags, '$[0]') as jt
+SELECT name, json_extract(tags, '$[0]') as jt
  FROM cars
-WHERE jt = 1
 """
 
 try dbc.query(jq_1)
@@ -166,8 +132,9 @@ let names: [String] = try dbc.query("SELECT name FROM cars WHERE price >= ?", [2
 
 print (names)
 
-let cars: [Car] = try dbc.query("SELECT * FROM cars WHERE price > ?", [20_000])
-print (cars)
+// let cars: [Car] = try dbc.query("SELECT * FROM cars, json_each(cars.tags) as tag WHERE tag.value == 'alpha' OR price > ?", [20_000])
+let cars: [Car] = try dbc.query("SELECT * FROM cars, json_each(cars.tags) as tags WHERE tags.value == 'alpha'", [])
+print (#line, "CAR:", cars)
 
 let stmnt = try dbc.prepare("SELECT * FROM cars WHERE price > ?", [20_000])
 
@@ -185,6 +152,37 @@ try dbc.fetch("SELECT * FROM cars WHERE price >= ?", [20_000]) {
 for row in rows {
     print (#line, row)
 }
+
+try dbc.fetch("PRAGMA table_info('cars')", []) {
+    print ($0)
+}
+
+try dbc.fetch("select * from pragma_table_info('cars')", []) {
+    print ($0)
+}
+
+let db = try Database(storageLocation: .inMemory)
+//let db = try Database(storageLocation: .onDisk("/Users/jason/demo.db"))
+//let db = try Database(storageLocation: .onDisk("file::memory:?cache=shared"))
+//let db = try Database(storageLocation: .temporary)
+
+try db.executeWrite {
+    try $0.execute("CREATE TABLE cars(id INTEGER PRIMARY KEY, name TEXT, price INTEGER, tags JSON, location JSON, freq TEXT)")
+
+    try $0.execute("INSERT INTO cars (name, price, tags) VALUES('Audi', 52642, '\(tags)')")
+    try $0.execute("INSERT INTO cars (name, price, tags) VALUES('Mercedes', 57127, '\(tags)')")
+}
+
+try db.executeRead {
+    let row = try $0.query("SELECT * FROM cars WHERE price > ?", [20_000])
+    let stmnt = try $0.prepare("SELECT * FROM cars", [])
+    let count: Int? = try $0.query("SELECT count(*) FROM cars", [])
+
+    try stmnt.fetch {
+        print (#line, $0)
+    }
+}
+print(#line, "PASS")
 
 /*
 func bindingValue(value: Any) -> String {

@@ -18,6 +18,7 @@ import Foundation
 public enum StorageLocation {
     case onDisk(String)
     case inMemory
+    case sharedInMemory(String)
     case temporary
 
     /// Returns the path of the database.
@@ -25,6 +26,10 @@ public enum StorageLocation {
         switch self {
         case .onDisk(let path):
             return path
+
+        // file::memory:?cache=shared
+        case .sharedInMemory(let name):
+            return "\(name)::memory:?cache=shared"
 
         case .inMemory:
             return ":memory:"
