@@ -13,7 +13,13 @@ import Foundation
 /// The `Database` class is a lightweight way to create a single writable connection queue and connection pool for
 /// all read statements. The read and write APIs are designed to make it simple to execute SQL statements on the
 /// appropriate type of `Connection` in a thread-safe manner.
-public class Database {
+open class Database {
+    
+    public struct DBError: Error, CustomStringConvertible {
+        public var description: String
+        static var inMemoryInvalidOption = DBError(description: "DBERROR: The .inMemory StorageLocation is not valid when using multiple Connections" )
+    }
+    
     /// The writer connection queue used to execute all write operations.
     public var writerConnectionQueue: ConnectionQueue!
 
@@ -27,6 +33,7 @@ public class Database {
     /// The writer connection preparation closure is executed immediately after the writer connection is created. This
     /// can be very useful for setting up PRAGMAs or custom collation closures on the connection before use. The reader
     /// connection preparation closure is executed immediately after a new reader connection is created.
+    /// The default StorageLocation is 'file::memory:?cache=shared'
     ///
     /// - Parameters:
     ///   - storageLocation:             The storage location path to use during initialization.
@@ -41,7 +48,7 @@ public class Database {
     ///
     /// - Throws: A `SQLiteError` if SQLite encounters an error opening the writable connection.
     public init(
-        storageLocation: StorageLocation = .inMemory,
+        storageLocation: StorageLocation = .sharedMemory(":memory:"),
         tableLockPolicy: TableLockPolicy = .fastFail,
         multiThreaded: Bool = true,
         sharedCache: Bool = false,
@@ -50,6 +57,9 @@ public class Database {
         readerConnectionPreparation: ((Connection) throws -> Void)? = nil)
         throws
     {
+        
+        guard storageLocation.isShared else { throw DBError.inMemoryInvalidOption }
+        
         let writerConnection = try Connection(
             storageLocation: storageLocation,
             tableLockPolicy: tableLockPolicy,
@@ -88,7 +98,7 @@ public class Database {
     ///
     /// - Throws: A `SQLiteError` if SQLite encounters an error opening the writable connection.
     public init(
-        storageLocation: StorageLocation,
+        storageLocation: StorageLocation = .sharedMemory(":memory:"),
         tableLockPolicy: TableLockPolicy = .fastFail,
         flags: Int32,
         drainDelay: TimeInterval = 1.0,
@@ -96,6 +106,8 @@ public class Database {
         readerConnectionPreparation: ((Connection) throws -> Void)? = nil)
         throws
     {
+        guard storageLocation.isShared else { throw DBError.inMemoryInvalidOption }
+
         let writerConnection = try Connection(
             storageLocation: storageLocation,
             tableLockPolicy: tableLockPolicy,

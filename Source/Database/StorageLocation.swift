@@ -22,6 +22,15 @@ public enum StorageLocation {
     case sharedMemory(String)
     case temporary
 
+    public var isShared: Bool {
+        switch self {
+        case .inMemory: return false
+        case .temporary: return false
+        default:
+            return true
+        }
+    }
+    
     /// Returns the path of the database.
     public var path: String {
         switch self {

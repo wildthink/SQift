@@ -27,6 +27,13 @@ SQift is a lightweight Swift wrapper for SQLite.
 - [x] Comprehensive Unit Test Coverage
 - [x] Complete Documentation
 
+## WildThink Extensions
+
+- [X] Shared Memory Option
+- [ ] JSON Support
+- [ ] AppDatabase
+- [ ] Database Snapshots
+
 ## Requirements
 
 - iOS 10.0+, macOS 10.12+, tvOS 10.0+, watchOS 3.0+

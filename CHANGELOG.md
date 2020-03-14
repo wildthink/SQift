@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 
 #### 5.x Releases
 
+- `5.1.x` Releases - [5.1.0](#510) 
 - `5.0.x` Releases - [5.0.0](#500) | [5.0.1](#501)
 
 #### 4.x Releases
@@ -42,6 +43,13 @@ All notable changes to this project will be documented in this file.
 - `0.1.x` Releases - [0.1.0](#010)
 
 ---
+## [5.1.0](https://github.com/wildthink/SQift/releases/tag/5.1.0)
+#### WildThink Beta 1
+- Added `StorageLocation.sharedMemory()` option so all Database Connections share the same database.
+- Changed default `Database StorageLocation` to `.sharedMemory` and disallow `.inMemory` option.
+- Added basic SQLite JSON Support (see [JSON1 Extension](https://www.sqlite.org/json1.html))
+- Changed `Database` to `open` to subclassing.
+- Added `AppDatabase`.
 
 ## [5.0.1](https://github.com/Nike-Inc/SQift/releases/tag/5.0.1)
 
