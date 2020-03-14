@@ -302,6 +302,8 @@
 		4CD9E069207C47FB00D02902 /* .travis.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
 		4CE5E8681F59E88E00D47037 /* SQift.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = SQift.podspec; sourceTree = "<group>"; };
 		967C8434241B3AA20019074F /* AppDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDatabase.swift; sourceTree = "<group>"; };
+		96D77F5F241D87B5004D4DB8 /* SQift 4.0 Migration Guide.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = "SQift 4.0 Migration Guide.md"; sourceTree = "<group>"; };
+		96D77F61241D8871004D4DB8 /* SQiftLab.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = SQiftLab.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		96F02457241485700067A6C0 /* AnyCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCodable.swift; sourceTree = "<group>"; };
 		F68734B5238B7293006DC8D8 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -565,6 +567,8 @@
 		4CA8C2141BF6A49400822606 = {
 			isa = PBXGroup;
 			children = (
+				96D77F61241D8871004D4DB8 /* SQiftLab.playground */,
+				96D77F5E241D87B5004D4DB8 /* Documentation */,
 				4CE5E8661F59E87800D47037 /* Deployment */,
 				4C8A44462363BCB7008C7BBC /* Documentation */,
 				4CD9E068207C47EC00D02902 /* Integration */,
@@ -631,6 +635,14 @@
 				4CE5E8681F59E88E00D47037 /* SQift.podspec */,
 			);
 			name = Deployment;
+			sourceTree = "<group>";
+		};
+		96D77F5E241D87B5004D4DB8 /* Documentation */ = {
+			isa = PBXGroup;
+			children = (
+				96D77F5F241D87B5004D4DB8 /* SQift 4.0 Migration Guide.md */,
+			);
+			path = Documentation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

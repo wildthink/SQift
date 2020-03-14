@@ -135,10 +135,7 @@ open class Database {
     /// - Throws: A `SQLiteError` if SQLite encounters an error executing the closure.
     public func executeRead(closure: (Connection) throws -> Void) throws {
         try readerConnectionPool.execute { connection in
-            // jmj - added transaction
-            try connection.transaction {
-                try closure(connection)
-            }
+            try closure(connection)
         }
     }
 
