@@ -17,7 +17,11 @@ open class Database {
     
     public struct DBError: Error, CustomStringConvertible {
         public var description: String
+        
         static var inMemoryInvalidOption = DBError(description: "DBERROR: The .inMemory StorageLocation is not valid when using multiple Connections" )
+        
+        static var invalidFile = DBError(description: "DBERROR: File NOT found" )
+
     }
     
     /// The writer connection queue used to execute all write operations.
