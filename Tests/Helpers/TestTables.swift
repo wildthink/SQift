@@ -27,7 +27,7 @@ enum TestTables {
                 """
             )
 
-            let insertSQL = "INSERT INTO agents(name, date, missions, salary, job_title, car) VALUES(?, ?, ?, ?, ?, ?)"
+            let insertSQL: SQL = "INSERT INTO agents(name, date, missions, salary, job_title, car) VALUES(?, ?, ?, ?, ?, ?)"
             let insert = try connection.prepare(insertSQL)
 
             let archersJobTitleData = "The world's greatest secret agent".data(using: .utf8)
@@ -42,7 +42,7 @@ enum TestTables {
         let dateString = bindingDateFormatter.string(from: Date())
 
         try connection.transaction {
-            let sql = "INSERT INTO agents(name, date, missions, salary, job_title, car) VALUES(?, ?, ?, ?, ?, ?)"
+            let sql: SQL = "INSERT INTO agents(name, date, missions, salary, job_title, car) VALUES(?, ?, ?, ?, ?, ?)"
             let statement = try connection.prepare(sql)
 
             for index in 0..<count {

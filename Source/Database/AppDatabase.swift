@@ -12,6 +12,7 @@ open class AppDatabase: Database {
     
     public static var shared: AppDatabase! = try? AppDatabase()
     
+//    public init()
     public func execute(contentsOfFile file: String) throws {
         let sql = try String(contentsOfFile: file)
         try executeWrite {
@@ -39,12 +40,40 @@ open class AppDatabase: Database {
 
 // MARK: Application Setting Operations
 
-    public func set(_ key: String, to value: Any) {
-        
+    /// The Application Environment State is stored in the `applicationTable`
+    /// which is defined by the following schema.
+    ///
+    /// CREATE TABLE app_env (
+    ///     key TEXT PRIMARY KEY,
+    ///     value BLOB
+    ///  )
+    
+    public private(set) var applicationTable = "app_env"
+    
+    open func createApplicationDatabase() throws {
+        try executeWrite {
+            try $0.execute("""
+                CREATE TABLE app_env (
+                    key TEXT PRIMARY KEY,
+                    value BLOB
+                )
+            """)
+        }
+    }
+    
+    public func set(_ key: String, to value: Any) throws {
+        try executeWrite {
+            try $0.delete(from: applicationTable, where: "key = '\(key)'")
+            try $0.insert(into: applicationTable, from: ["key": key, "value": value])
+        }
     }
     
     public func get(_ key: String) -> Any? {
-        return nil
+        var value: Any?
+        try? executeRead {
+            value = try $0.query("SELECT value FROM \(applicationTable) WHERE key = ?", [key])
+        }
+        return value
     }
     
     /// The `append` method  wraps the value into a JSON array
@@ -58,9 +87,37 @@ open class AppDatabase: Database {
     }
 }
 
+public extension AppDatabase {
+    struct Table {
+        var name: String
+    }
+    
+    struct Column: CustomStringConvertible {
+        public let name: String
+        public let sqlType: String
+        public let dataType: String
+        
+        public var description: String { "\(name) \(sqlType)" }
+        
+        static var id_c: Column = Column(name: "id", sqlType: "INTEGER PRIMARY KEY", dataType: "Int64")
+        static func text(_ name: String) -> Column {
+            Column(name: name, sqlType: "TEXT", dataType: "String")
+        }
+        static func int(_ name: String) -> Column {
+            Column(name: name, sqlType: "INT", dataType: "Int64")
+        }
+        static func real(_ name: String) -> Column {
+            Column(name: name, sqlType: "REAL", dataType: "Double")
+        }
+        static func json_obj(_ name: String) -> Column {
+            Column(name: name, sqlType: "JSON OBJ TEXT", dataType: "[String:Any]")
+        }
+    }
+}
+
 extension AppDatabase {
     
-    func sql_type(for nob: Any) -> String {
+    public func sql_type(for nob: Any) -> String {
         
         switch nob {
         case is String: return "TEXT"
@@ -69,14 +126,15 @@ extension AppDatabase {
         case is Data: return "BLOB"
         case is NSNull: return "NULL"
         case is Date: return "DATE"
-        case is Array<Any>: return "JSON"
-        case is Dictionary<String,Any>: return "JSON"
+        case is Array<Any>: return "JSON ARRAY TEXT"
+        case is Dictionary<String,Any>: return "JSON OBJ TEXT"
         default:
             return ""
         }
     }
 
-    public func createSQL(_ table: String, for nob: [String:Any], pkey: String? = nil) -> SQL {
+    public func createSQL(_ table: String, for nob: [String:Any], pkey: String? = nil,
+                          skipPrefix: String? = nil) -> SQL {
         
         var endx = nob.count - 1
         var sql = "CREATE TABLE \(table) (\n"
@@ -88,10 +146,12 @@ extension AppDatabase {
         }
         
         for (key, v) in nob {
-            let comma = endx > 0 ? "," : ""
-            if key != pkey {
-                print("\t", key, " ", sql_type(for: v), comma, separator: "", to: &sql)
+            if key == pkey, let skip = skipPrefix, key.starts(with: skip) {
+                endx += 1
+                continue
             }
+            let comma = endx > 0 ? "," : ""
+            print("\t", key, " ", sql_type(for: v), comma, separator: "", to: &sql)
             endx -= 1
         }
         print(")", to: &sql)

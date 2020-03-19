@@ -676,17 +676,30 @@ extension Connection {
     ///
     /// - Throws: A `SQLiteError` if SQLite encounters an error stepping through the statement.
 
-    public func insert(into table: String, mapping: [String:String] = [:], from plist: [String:Any]) throws {
+    // public func insert(into table: String, mapping: [String:String] = [:], from plist: [String:Any]) throws {
+    public func insert(into table: String, from plist: [String:Any]) throws {
         
         var keys: [String] = []
         var values: [String] = []
         
         for (key, val) in plist {
-            let ckey = mapping[key] ?? key
-            keys.append(ckey)
+//            let ckey = mapping[key] ?? key
+            keys.append(key)
             values.append (sql_quote(val))
         }
         let sql: SQL = "INSERT INTO \(table) (\(keys.joined(separator: ","))) VALUES(\(values.joined(separator: ",")))"
         try execute(sql)
+    }
+    
+    /// The `delete` method deletes records from the given `table`
+    /// In the exceptional case you really want to remove all the records
+    /// in the table the `confirmAll` MUST be explicitly set and the test
+    /// be empty
+    public func delete(from table: String, where test: String, confirmAll: Bool = false) throws {
+        if confirmAll, test == "" {
+            try execute("DELETE FROM \(table)")
+        } else {
+            try execute("DELETE FROM \(table) WHERE \(test)")
+        }
     }
 }

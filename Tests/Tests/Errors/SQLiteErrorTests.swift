@@ -115,7 +115,8 @@ class SQLiteErrorTestCase: BaseTestCase {
         } catch let error as SQLiteError {
             // Then
             XCTAssertEqual(error.code, SQLITE_MISUSE)
-            XCTAssertEqual(error.message, "Bind could not find index for key: \':f\'")
+            XCTAssertEqual(error.message, "Bind expected 5 parameters, instead received 1")
+//            XCTAssertEqual(error.message, "Bind could not find index for key: \':f\'")
         } catch {
             XCTFail("Failed with an unknown error type: \(error)")
         }

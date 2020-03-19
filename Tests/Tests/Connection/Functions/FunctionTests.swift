@@ -90,7 +90,7 @@ class FunctionTestCase: BaseTestCase {
             }
         }
 
-        let sql = "SELECT sq_value(?, ?)"
+        let sql: SQL = "SELECT sq_value(?, ?)"
 
         // When
         let result1: Int? = try connection.prepare(sql, 1, 123).query()
@@ -140,7 +140,7 @@ class FunctionTestCase: BaseTestCase {
             }
         }
 
-        let sql = "SELECT sq_num_value(?)"
+        let sql: SQL = "SELECT sq_num_value(?)"
 
         // When
         let result1: Int64? = try connection.prepare(sql, "123").query()
@@ -186,7 +186,7 @@ class FunctionTestCase: BaseTestCase {
             }
         }
 
-        let sql = "SELECT sq_switch(?)"
+        let sql: SQL = "SELECT sq_switch(?)"
 
         // When
         let nilResult: Int? = try connection.prepare(sql, 0).query()
@@ -248,7 +248,7 @@ class FunctionTestCase: BaseTestCase {
             }
         )
 
-        let sql = "SELECT sq_switch(value) FROM sq_values WHERE value = ?"
+        let sql: SQL = "SELECT sq_switch(value) FROM sq_values WHERE value = ?"
 
         // When
         let nilResult: Int? = try connection.prepare(sql, 0).query()
@@ -291,7 +291,7 @@ class FunctionTestCase: BaseTestCase {
             }
         }
 
-        let sql = "SELECT sq_throw(?)"
+        let sql: SQL = "SELECT sq_throw(?)"
 
         // When, Then
         XCTAssertThrowsError(try connection.prepare(sql, 0).run(), "select should throw") { error in
@@ -387,7 +387,7 @@ class FunctionTestCase: BaseTestCase {
             }
         )
 
-        let sql = "SELECT sq_throw(value) FROM sq_values WHERE value = ?"
+        let sql: SQL = "SELECT sq_throw(value) FROM sq_values WHERE value = ?"
 
         // When, Then
         XCTAssertThrowsError(try connection.prepare(sql, 0).run(), "select should throw") { error in
@@ -618,7 +618,7 @@ class FunctionTestCase: BaseTestCase {
             }
         }
 
-        let sql = "SELECT sq_echo(?)"
+        let sql: SQL = "SELECT sq_echo(?)"
 
         // When
         let nilResult: Int? = try connection.prepare(sql, nil).query()
@@ -669,7 +669,7 @@ class FunctionTestCase: BaseTestCase {
             }
         }
 
-        let sql = "SELECT sq_add(?, ?)"
+        let sql: SQL = "SELECT sq_add(?, ?)"
 
         // When
         let nilResult: Int? = try connection.prepare(sql, nil, nil).query()
@@ -723,7 +723,7 @@ class FunctionTestCase: BaseTestCase {
             return .text(dateFormatter.string(from: date))
         }
 
-        let sql = "SELECT format_date(?, value) FROM sq_values"
+        let sql: SQL = "SELECT format_date(?, value) FROM sq_values"
 
         // When
         let results: [Date?] = try connection.query(sql, "yyyy-MM-dd'T'HH:mm:ss.SSS")
@@ -818,7 +818,7 @@ class FunctionTestCase: BaseTestCase {
             }
         )
 
-        let sql = "SELECT sq_sum(value) FROM sq_values GROUP BY grp"
+        let sql: SQL = "SELECT sq_sum(value) FROM sq_values GROUP BY grp"
 
         // When
         let sumResults: [Int64?] = try connection.query(sql)

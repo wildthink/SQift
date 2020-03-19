@@ -202,6 +202,9 @@
 		4C7EC8D020462706000FC1EF /* TableLockPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7EC8CD20462706000FC1EF /* TableLockPolicyTests.swift */; };
 		4CA8C2291BF6A49400822606 /* SQift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA8C21E1BF6A49400822606 /* SQift.framework */; };
 		967C8435241B3AA20019074F /* AppDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967C8434241B3AA20019074F /* AppDatabase.swift */; };
+		968C531724236E5700DEF82D /* AppDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967C8434241B3AA20019074F /* AppDatabase.swift */; };
+		968C531824236E5900DEF82D /* AppDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967C8434241B3AA20019074F /* AppDatabase.swift */; };
+		968C531924236E5B00DEF82D /* AppDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967C8434241B3AA20019074F /* AppDatabase.swift */; };
 		96F02458241485700067A6C0 /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F02457241485700067A6C0 /* AnyCodable.swift */; };
 		96F02459241485700067A6C0 /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F02457241485700067A6C0 /* AnyCodable.swift */; };
 		96F0245A241485700067A6C0 /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F02457241485700067A6C0 /* AnyCodable.swift */; };
@@ -303,7 +306,6 @@
 		4CE5E8681F59E88E00D47037 /* SQift.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = SQift.podspec; sourceTree = "<group>"; };
 		967C8434241B3AA20019074F /* AppDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDatabase.swift; sourceTree = "<group>"; };
 		96D77F5F241D87B5004D4DB8 /* SQift 4.0 Migration Guide.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = "SQift 4.0 Migration Guide.md"; sourceTree = "<group>"; };
-		96D77F61241D8871004D4DB8 /* SQiftLab.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = SQiftLab.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		96F02457241485700067A6C0 /* AnyCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCodable.swift; sourceTree = "<group>"; };
 		F68734B5238B7293006DC8D8 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -567,7 +569,6 @@
 		4CA8C2141BF6A49400822606 = {
 			isa = PBXGroup;
 			children = (
-				96D77F61241D8871004D4DB8 /* SQiftLab.playground */,
 				96D77F5E241D87B5004D4DB8 /* Documentation */,
 				4CE5E8661F59E87800D47037 /* Deployment */,
 				4C8A44462363BCB7008C7BBC /* Documentation */,
@@ -984,6 +985,7 @@
 				4C6120E61F58BB5200C289C0 /* Database.swift in Sources */,
 				4C34E44B1F58D9E3006FE2CC /* Busy.swift in Sources */,
 				4C6120E51F58BB5200C289C0 /* Transaction.swift in Sources */,
+				968C531724236E5700DEF82D /* AppDatabase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1049,6 +1051,7 @@
 				4C6120F61F58BB5200C289C0 /* Database.swift in Sources */,
 				4C34E44D1F58D9E3006FE2CC /* Busy.swift in Sources */,
 				4C6120F51F58BB5200C289C0 /* Transaction.swift in Sources */,
+				968C531824236E5900DEF82D /* AppDatabase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1114,6 +1117,7 @@
 				4C6121061F58BB5300C289C0 /* Database.swift in Sources */,
 				4C34E44C1F58D9E3006FE2CC /* Busy.swift in Sources */,
 				4C6121051F58BB5300C289C0 /* Transaction.swift in Sources */,
+				968C531924236E5B00DEF82D /* AppDatabase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

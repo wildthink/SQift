@@ -13,7 +13,12 @@ import SQLite3
 
 /// Represents a SQL statement to be compiled as a string.
 //public typealias SQL = String
-public struct SQL: ExpressibleByStringInterpolation, CustomStringConvertible {
+public struct SQL: ExpressibleByStringInterpolation, CustomStringConvertible, Equatable {
+    
+    public static func == (lhs: SQL, rhs: String) -> Bool {
+        return lhs.description == rhs
+    }
+    
     var rawValue: String
     public var description: String { rawValue }
         
@@ -171,6 +176,11 @@ public class Connection {
 
         try check(result)
     }
+    
+    public func execute(_ sql: String) throws {
+        try execute(SQL(sql))
+    }
+
 
     /// Causes any active database operation to abort and return at its earliest opportunity.
     ///

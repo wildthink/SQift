@@ -91,8 +91,8 @@ class QueryTestCase: BaseConnectionTestCase {
 
     func testThatConnectionCanQueryT() throws {
         // Given
-        let sql1 = "SELECT * FROM agents WHERE car = ?"
-        let sql2 = "SELECT * FROM agents WHERE car = :car"
+        let sql1: SQL = "SELECT * FROM agents WHERE car = ?"
+        let sql2: SQL = "SELECT * FROM agents WHERE car = :car"
 
         // When
         let lana1: Agent? = try connection.query("SELECT * FROM agents WHERE car IS NULL") { try Agent(row: $0) }
@@ -137,8 +137,8 @@ class QueryTestCase: BaseConnectionTestCase {
 
     func testThatConnectionCanQueryTArray() throws {
         // Given
-        let sql1 = "SELECT * FROM agents WHERE car = ?"
-        let sql2 = "SELECT * FROM agents WHERE car = :car"
+        let sql1: SQL = "SELECT * FROM agents WHERE car = ?"
+        let sql2: SQL = "SELECT * FROM agents WHERE car = :car"
 
         // When
         let agents1: [Agent] = try connection.query("SELECT * FROM agents") { try Agent(row: $0) }
@@ -155,8 +155,8 @@ class QueryTestCase: BaseConnectionTestCase {
 
     func testThatConnectionCanQueryDictionary() throws {
         // Given
-        let sql1 = "SELECT name, missions FROM agents WHERE missions > ?"
-        let sql2 = "SELECT name, missions FROM agents WHERE missions > :missions"
+        let sql1: SQL = "SELECT name, missions FROM agents WHERE missions > ?"
+        let sql2: SQL = "SELECT name, missions FROM agents WHERE missions > :missions"
 
         // When
         let cars: [String: String?] = try connection.query("SELECT name, car FROM agents") { ($0[0], $0[1]) }
@@ -184,9 +184,9 @@ class QueryTestCase: BaseConnectionTestCase {
 
     func testThatConnectionCanQueryDictionaryWithResultInjection() throws {
         // Given
-        let sql1 = "SELECT name, missions FROM agents"
-        let sql2 = "SELECT name, missions FROM agents WHERE missions > ?"
-        let sql3 = "SELECT name, missions FROM agents WHERE missions > :missions"
+        let sql1: SQL = "SELECT name, missions FROM agents"
+        let sql2: SQL = "SELECT name, missions FROM agents WHERE missions > ?"
+        let sql3: SQL = "SELECT name, missions FROM agents WHERE missions > :missions"
 
         // When
         let missions1: [Int: [String: Int]] = try connection.query(sql1) { results, row in

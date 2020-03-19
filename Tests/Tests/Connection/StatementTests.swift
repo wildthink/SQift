@@ -92,3 +92,8 @@ class StatementTestCase: BaseConnectionTestCase {
         XCTAssertEqual(selectSQL, "SELECT * FROM person WHERE id = 1")
     }
 }
+
+//func XCTAssertEqual(_ expression1: @autoclosure () throws -> SQL, _ expression2: @autoclosure () throws -> String, _ message: @autoclosure () -> String = "", file: StaticString = #file, line: UInt = #line)
+//    {
+//        
+//    }

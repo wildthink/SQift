@@ -101,6 +101,8 @@ open class Database {
     ///                                  default.
     ///
     /// - Throws: A `SQLiteError` if SQLite encounters an error opening the writable connection.
+    // NOTE: jmj - The ONLY difference between the two `inits` is that this one the user
+    // passes all the flags as an Int32 bitmask
     public init(
         storageLocation: StorageLocation = .sharedMemory(":memory:"),
         tableLockPolicy: TableLockPolicy = .fastFail,
@@ -151,9 +153,9 @@ open class Database {
     public func executeWrite(closure: (Connection) throws -> Void) throws {
         try writerConnectionQueue.execute { connection in
             // jmj - added transaction
-            try connection.transaction {
+//            try connection.transaction {
                 try closure(connection)
-            }
+//            }
         }
     }
 }
