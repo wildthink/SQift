@@ -643,7 +643,7 @@ extension Connection {
     }
     
     /// This method wraps Arrays and Dictionaries as `json` values
-    func sql_quote(_ any: Any) -> String {
+    public func sql_quote(_ any: Any) -> String {
         if let str = any as? String { return "'\(str)'" }
         if any is [Any] || any is [String:Any],
             let data = try? JSONSerialization.data(withJSONObject: any, options: []),
@@ -653,7 +653,7 @@ extension Connection {
         return String(describing: any)
     }
     
-    func sql_format(column name: String) -> String {
+    public func sql_format(column name: String) -> String {
         guard name.starts(with: "$"), name.contains(".") else { return name }
         let col = name.starts(with: "$") ? String(name.dropFirst()) : name
         let keys = col.split(separator: ".", maxSplits: 1)
