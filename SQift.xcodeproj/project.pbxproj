@@ -209,6 +209,10 @@
 		96F02459241485700067A6C0 /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F02457241485700067A6C0 /* AnyCodable.swift */; };
 		96F0245A241485700067A6C0 /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F02457241485700067A6C0 /* AnyCodable.swift */; };
 		96F0245B241485700067A6C0 /* AnyCodable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F02457241485700067A6C0 /* AnyCodable.swift */; };
+		96FE2EE4242706FE00A59C38 /* Updates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FE2EE3242706FE00A59C38 /* Updates.swift */; };
+		96FE2EE524270E7400A59C38 /* Updates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FE2EE3242706FE00A59C38 /* Updates.swift */; };
+		96FE2EE624270E7600A59C38 /* Updates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FE2EE3242706FE00A59C38 /* Updates.swift */; };
+		96FE2EE724270E7700A59C38 /* Updates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96FE2EE3242706FE00A59C38 /* Updates.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -307,6 +311,7 @@
 		967C8434241B3AA20019074F /* AppDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDatabase.swift; sourceTree = "<group>"; };
 		96D77F5F241D87B5004D4DB8 /* SQift 4.0 Migration Guide.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = "SQift 4.0 Migration Guide.md"; sourceTree = "<group>"; };
 		96F02457241485700067A6C0 /* AnyCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCodable.swift; sourceTree = "<group>"; };
+		96FE2EE3242706FE00A59C38 /* Updates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Updates.swift; sourceTree = "<group>"; };
 		F68734B5238B7293006DC8D8 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -418,6 +423,7 @@
 				4C6120851F58BAD500C289C0 /* Query.swift */,
 				4C6120871F58BAD500C289C0 /* Trace.swift */,
 				4C6120881F58BAD500C289C0 /* Transaction.swift */,
+				96FE2EE3242706FE00A59C38 /* Updates.swift */,
 			);
 			path = Functions;
 			sourceTree = "<group>";
@@ -979,6 +985,7 @@
 				4C34E4321F58D8B4006FE2CC /* Statement.swift in Sources */,
 				96F02459241485700067A6C0 /* AnyCodable.swift in Sources */,
 				4C6120E21F58BB5200C289C0 /* Query.swift in Sources */,
+				96FE2EE524270E7400A59C38 /* Updates.swift in Sources */,
 				4C34E45F1F58DA79006FE2CC /* Backup.swift in Sources */,
 				4C6120EC1F58BB5200C289C0 /* Row.swift in Sources */,
 				4C6120E11F58BB5200C289C0 /* Function.swift in Sources */,
@@ -1045,6 +1052,7 @@
 				4C34E4341F58D8B4006FE2CC /* Statement.swift in Sources */,
 				96F0245A241485700067A6C0 /* AnyCodable.swift in Sources */,
 				4C6120F21F58BB5200C289C0 /* Query.swift in Sources */,
+				96FE2EE624270E7600A59C38 /* Updates.swift in Sources */,
 				4C34E4601F58DA79006FE2CC /* Backup.swift in Sources */,
 				4C6120FC1F58BB5200C289C0 /* Row.swift in Sources */,
 				4C6120F11F58BB5200C289C0 /* Function.swift in Sources */,
@@ -1111,6 +1119,7 @@
 				4C34E4331F58D8B4006FE2CC /* Statement.swift in Sources */,
 				96F0245B241485700067A6C0 /* AnyCodable.swift in Sources */,
 				4C6121021F58BB5300C289C0 /* Query.swift in Sources */,
+				96FE2EE724270E7700A59C38 /* Updates.swift in Sources */,
 				4C34E45E1F58DA79006FE2CC /* Backup.swift in Sources */,
 				4C61210C1F58BB5300C289C0 /* Row.swift in Sources */,
 				4C6121011F58BB5300C289C0 /* Function.swift in Sources */,
@@ -1143,6 +1152,7 @@
 				4C34E4311F58D8B4006FE2CC /* Statement.swift in Sources */,
 				96F02458241485700067A6C0 /* AnyCodable.swift in Sources */,
 				4C6120D21F58BB5100C289C0 /* Query.swift in Sources */,
+				96FE2EE4242706FE00A59C38 /* Updates.swift in Sources */,
 				4C34E45D1F58DA79006FE2CC /* Backup.swift in Sources */,
 				4C6120DC1F58BB5100C289C0 /* Row.swift in Sources */,
 				4C6120D11F58BB5100C289C0 /* Function.swift in Sources */,

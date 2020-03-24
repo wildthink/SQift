@@ -642,64 +642,31 @@ extension Connection {
         try statement.fetch(body)
     }
     
-    /// This method wraps Arrays and Dictionaries as `json` values
-    public func sql_quote(_ any: Any) -> String {
-        if let str = any as? String { return "'\(str)'" }
-        if any is [Any] || any is [String:Any],
-            let data = try? JSONSerialization.data(withJSONObject: any, options: []),
-            let str = String(data: data, encoding: .utf8) {
-                return "json('\(str)')"
+    public func rowids(for table: String, where test: String? = nil) throws -> [Int64] {
+        var sql = "SELECT ROWID FROM \(table)"
+        if let test = test {
+            sql += " WHERE \(test)"
         }
-        return String(describing: any)
-    }
-    
-    public func sql_format(column name: String) -> String {
-        guard name.starts(with: "$"), name.contains(".") else { return name }
-        let col = name.starts(with: "$") ? String(name.dropFirst()) : name
-        let keys = col.split(separator: ".", maxSplits: 1)
-        return "json_extract(\(keys[0]),'\(keys[1])')"
-    }
-    
-    /// This `insert` method is useful when it is desirable to insert  values
-    /// in a Dictionary. An optional mapping can be provided to rename the keys
-    /// from the dictionary into internal column names. The default is to use the
-    /// keys provided.
-    ///
-    ///
-    /// - Parameter table: The name of the table
-    ///
-    /// - Parameter mapping: Alternate plist key to column names map
-    ///
-    /// - Parameter plist: A Dictionary with values for a record.
-    ///
-    /// - Returns: Void
-    ///
-    /// - Throws: A `SQLiteError` if SQLite encounters an error stepping through the statement.
-
-    // public func insert(into table: String, mapping: [String:String] = [:], from plist: [String:Any]) throws {
-    public func insert(into table: String, from plist: [String:Any]) throws {
-        
-        var keys: [String] = []
-        var values: [String] = []
-        
-        for (key, val) in plist {
-//            let ckey = mapping[key] ?? key
-            keys.append(key)
-            values.append (sql_quote(val))
-        }
-        let sql: SQL = "INSERT INTO \(table) (\(keys.joined(separator: ","))) VALUES(\(values.joined(separator: ",")))"
-        try execute(sql)
-    }
-    
-    /// The `delete` method deletes records from the given `table`
-    /// In the exceptional case you really want to remove all the records
-    /// in the table the `confirmAll` MUST be explicitly set and the test
-    /// be empty
-    public func delete(from table: String, where test: String, confirmAll: Bool = false) throws {
-        if confirmAll, test == "" {
-            try execute("DELETE FROM \(table)")
-        } else {
-            try execute("DELETE FROM \(table) WHERE \(test)")
-        }
+        let rids: [Int64] = try query(SQL(sql), [])
+        return rids
     }
 }
+
+/// This method wraps Arrays and Dictionaries as `json` values
+public func sql_quote(_ any: Any) -> String {
+    if let str = any as? String { return "'\(str)'" }
+    if any is [Any] || any is [String:Any],
+        let data = try? JSONSerialization.data(withJSONObject: any, options: []),
+        let str = String(data: data, encoding: .utf8) {
+            return "json('\(str)')"
+    }
+    return String(describing: any)
+}
+
+public func sql_format(column name: String) -> String {
+    guard name.starts(with: "$"), name.contains(".") else { return name }
+    let col = name.starts(with: "$") ? String(name.dropFirst()) : name
+    let keys = col.split(separator: ".", maxSplits: 1)
+    return "json_extract(\(keys[0]),'\(keys[1])')"
+}
+

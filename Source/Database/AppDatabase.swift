@@ -53,18 +53,33 @@ open class AppDatabase: Database {
     open func createApplicationDatabase() throws {
         try executeWrite {
             try $0.execute("""
-                CREATE TABLE app_env (
+                CREATE TABLE \(applicationTable) (
                     key TEXT PRIMARY KEY,
+                    tag TEXT,
                     value BLOB
                 )
             """)
         }
     }
     
+    /*
+     INSERT INTO memos(id,text)
+     SELECT 5, 'text to insert'
+     WHERE NOT EXISTS(SELECT 1 FROM memos WHERE id = 5 AND text = 'text to insert');
+     */
+    
     public func set(_ key: String, to value: Any) throws {
         try executeWrite {
-            try $0.delete(from: applicationTable, where: "key = '\(key)'")
-            try $0.insert(into: applicationTable, from: ["key": key, "value": value])
+            let q_value = sql_quote(value)
+            let sql = """
+                INSERT INTO \(applicationTable) (key,value)
+                SELECT \(key), \(q_value)
+                WHERE NOT EXISTS(SELECT 1 FROM \(applicationTable) WHERE key = \(key);
+            
+                UPDATE \(applicationTable) SET key = \(key), value = \(q_value)
+                WHERE NOT (key = \(key) AND value = \(q_value))
+            """
+            try $0.execute(sql)
         }
     }
     
@@ -75,6 +90,13 @@ open class AppDatabase: Database {
         }
         return value
     }
+    
+    public func update(_ table: String, with keyvalues: [String:Any]) throws {
+        try executeWrite {
+            try $0.update(table: table, with: keyvalues)
+        }
+    }
+
     
     /// The `append` method  wraps the value into a JSON array
     public func append(_ value: Any, to key: String) {

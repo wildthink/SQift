@@ -139,9 +139,12 @@ open class Database {
     /// - Parameter closure: The closure to execute.
     ///
     /// - Throws: A `SQLiteError` if SQLite encounters an error executing the closure.
-    public func executeRead(closure: (Connection) throws -> Void) throws {
+    public func executeRead(_ transactionType: Connection.TransactionType = .deferred, closure: (Connection) throws -> Void) throws {
         try readerConnectionPool.execute { connection in
-            try closure(connection)
+            // jmj - added transaction
+            try connection.transaction(transactionType: transactionType) {
+                try closure(connection)
+            }
         }
     }
 
@@ -150,12 +153,12 @@ open class Database {
     /// - Parameter closure: The closure to execute.
     ///
     /// - Throws: A `SQLiteError` if SQLite encounters an error executing the closure.
-    public func executeWrite(closure: (Connection) throws -> Void) throws {
+    public func executeWrite(_ transactionType: Connection.TransactionType = .deferred, closure: (Connection) throws -> Void) throws {
         try writerConnectionQueue.execute { connection in
             // jmj - added transaction
-//            try connection.transaction {
+            try connection.transaction(transactionType: transactionType) {
                 try closure(connection)
-//            }
+            }
         }
     }
 }
