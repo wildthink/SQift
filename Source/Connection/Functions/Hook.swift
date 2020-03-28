@@ -91,6 +91,34 @@ extension Connection {
             Unmanaged<UpdateHookBox>.passUnretained(box).toOpaque()
         )
     }
+    
+    // jmj
+    #if SQLITE_ENABLE_PREUPDATE_HOOK
+
+    var preupdateHookBox: Any?
+
+    public func preupdateHook(_ hook: UpdateHook?) {
+        guard let hook = hook else {
+            sqlite3_preupdate_hook(handle, nil, nil)
+            preupdateHookBox = nil
+            return
+        }
+
+        let box = UpdateHookBox(hook: hook)
+        updateHookBox = box
+
+        sqlite3_preupdate_hook(
+            handle,
+            { (boxPointer: UnsafeMutableRawPointer?, type, databaseName, tableName, oldRowID, newRowId) in
+                guard let boxPointer = boxPointer else { return }
+                let box = Unmanaged<UpdateHookBox>.fromOpaque(boxPointer).takeUnretainedValue()
+                box.execute(type: type, databaseName: databaseName, tableName: tableName, rowID: rowID)
+            },
+            Unmanaged<UpdateHookBox>.passUnretained(box).toOpaque()
+        )
+    }
+    #endif
+
 }
 
 // MARK: - Commit Hook

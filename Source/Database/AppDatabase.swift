@@ -48,12 +48,21 @@ open class AppDatabase: Database {
     ///     value BLOB
     ///  )
     
-    public private(set) var applicationTable = "app_env"
+    public private(set) var applicationEnvTable = "app_env"
+    public private(set) var applicationLogTable = "app_log"
+
+    open func createApplicationDatabase(reset: Bool = false) throws {
+        try createApplicationDatabase(applicationEnvTable, reset: reset)
+        try createApplicationDatabase(applicationLogTable, reset: reset)
+    }
     
-    open func createApplicationDatabase() throws {
+    public func createApplicationDatabase(_ table: String, reset: Bool) throws {
         try executeWrite {
+            if reset {
+                try $0.execute("DROP TABLE IF EXISTS \(table)")
+            }
             try $0.execute("""
-                CREATE TABLE \(applicationTable) (
+                CREATE TABLE IF NOT EXISTS \(table) (
                     key TEXT PRIMARY KEY,
                     tag TEXT,
                     value BLOB
@@ -68,25 +77,33 @@ open class AppDatabase: Database {
      WHERE NOT EXISTS(SELECT 1 FROM memos WHERE id = 5 AND text = 'text to insert');
      */
     
-    public func set(_ key: String, to value: Any) throws {
+    public func set(env: String, to value: Any) throws {
+        try set(env, in: applicationEnvTable, to: value)
+    }
+    
+    public func get(env: String) -> Any? {
+        get (env, in: applicationEnvTable)
+    }
+    
+    func set(_ key: String, in table: String, to value: Any) throws {
         try executeWrite {
             let q_value = sql_quote(value)
             let sql = """
-                INSERT INTO \(applicationTable) (key,value)
+                INSERT INTO \(table) (key,value)
                 SELECT \(key), \(q_value)
-                WHERE NOT EXISTS(SELECT 1 FROM \(applicationTable) WHERE key = \(key);
+                WHERE NOT EXISTS(SELECT 1 FROM \(table) WHERE key = \(key);
             
-                UPDATE \(applicationTable) SET key = \(key), value = \(q_value)
+                UPDATE \(table) SET key = \(key), value = \(q_value)
                 WHERE NOT (key = \(key) AND value = \(q_value))
             """
             try $0.execute(sql)
         }
     }
     
-    public func get(_ key: String) -> Any? {
+    func get(_ key: String, in table: String) -> Any? {
         var value: Any?
         try? executeRead {
-            value = try $0.query("SELECT value FROM \(applicationTable) WHERE key = ?", [key])
+            value = try $0.query("SELECT value FROM \(applicationEnvTable) WHERE key = ?", [key])
         }
         return value
     }
