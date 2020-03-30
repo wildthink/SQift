@@ -108,7 +108,7 @@ open class AppDatabase: Database {
         return value
     }
     
-    public func update(_ table: String, with keyvalues: [String:Any]) throws {
+    public func update(_ table: String, with keyvalues: [String:Bindable?]) throws {
         try executeWrite {
             try $0.update(table: table, with: keyvalues)
         }

@@ -21,17 +21,21 @@ extension Connection {
     ///
     /// - Throws: A `SQLiteError` if SQLite encounters an error stepping through the statement.
     @discardableResult
-    public func insert(into table: String, from plist: [String:Any]) throws -> Int64 {
+    public func insert(into table: String, from plist: [String:Bindable?]) throws -> Int64 {
         
         var keys: [String] = []
-        var values: [String] = []
-        
+        var slots: [String] = []
+        var values: [Bindable?] = []
+
         for (key, val) in plist {
             keys.append(key)
-            values.append (sql_quote(val))
+            slots.append("?")
+//            values.append (sql_quote(val))
+            values.append(val)
         }
-        let sql: SQL = "INSERT INTO \(table) (\(keys.joined(separator: ","))) VALUES(\(values.joined(separator: ",")))"
-        try execute(sql)
+        let sql: SQL = "INSERT INTO \(table) (\(keys.joined(separator: ","))) VALUES(\(slots.joined(separator: ",")))"
+        
+        try run(sql, values)
         return lastInsertRowID
     }
     
@@ -59,16 +63,19 @@ extension Connection {
     /// - Returns: Void
     ///
     /// - Throws: A `SQLiteError` if SQLite encounters an error stepping through the statement.
-    public func update(table: String, with plist: [String:Any], limit: Int = -1) throws {
+    public func update(table: String, with plist: [String:Bindable?], limit: Int = -1) throws {
         
             var sets: [String] = []
-            
+            var values: [Bindable?] = []
+        
             for (key, value) in plist {
-                let q_value = sql_quote(value)
-                sets.append("\(key) = \(q_value)")
+//                let q_value = sql_quote(value as Any)
+//                sets.append("\(key) = \(q_value)")
+                sets.append("\(key) = ?")
+                values.append(value)
             }
             
-            let sql = """
+        let sql: SQL = """
                 UPDATE \(table)
                 SET \(sets.joined(separator: ","))
                 WHERE NOT (
@@ -79,7 +86,8 @@ extension Connection {
              ORDER column_or_expression
              LIMIT row_count OFFSET offset;
              */
-         try execute(sql)
+            try run(sql, values)
+//         try execute(sql)
     }
 
 }
