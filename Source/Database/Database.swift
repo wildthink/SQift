@@ -37,6 +37,9 @@ open class Database {
     /// The reader connection pool used to execute all read operations.
     public var readerConnectionPool: ConnectionPool!
     
+    /// The storageLocation we are initilized with.
+    public private(set) var storageLocation: StorageLocation
+    
     // MARK: - Initialization
 
     /// Creates a `Database` instance with the specified storage location, initialization flags and preparation closures.
@@ -70,6 +73,7 @@ open class Database {
     {
         
         guard storageLocation.isShared else { throw DBError.inMemoryInvalidOption }
+        self.storageLocation = storageLocation
         
         let writerConnection = try Connection(
             storageLocation: storageLocation,
@@ -120,6 +124,7 @@ open class Database {
         throws
     {
         guard storageLocation.isShared else { throw DBError.inMemoryInvalidOption }
+        self.storageLocation = storageLocation
 
         let writerConnection = try Connection(
             storageLocation: storageLocation,
