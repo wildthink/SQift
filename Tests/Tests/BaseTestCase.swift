@@ -52,6 +52,7 @@ class BaseConnectionTestCase: BaseTestCase {
 
         do {
             connection = try Connection(storageLocation: storageLocation)
+            XCTAssertNotNil(connection)
             try TestTables.createAndPopulateAgentsTable(using: connection)
         } catch {
             // No-op

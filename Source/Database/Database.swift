@@ -18,9 +18,16 @@ open class Database {
     public struct DBError: Error, CustomStringConvertible {
         public var description: String
         
-        static var inMemoryInvalidOption = DBError(description: "DBERROR: The .inMemory StorageLocation is not valid when using multiple Connections" )
+        public init (description msg: String) {
+            description = msg
+        }
+        public init (_ msg: String) {
+            description = msg
+        }
+
+        static var inMemoryInvalidOption = DBError("DBERROR: The .inMemory StorageLocation is not valid when using multiple Connections" )
         
-        static var invalidFile = DBError(description: "DBERROR: File NOT found" )
+        static var invalidFile = DBError("DBERROR: File NOT found" )
 
     }
     
@@ -142,8 +149,12 @@ open class Database {
     public func executeRead(_ transactionType: Connection.TransactionType = .deferred, closure: (Connection) throws -> Void) throws {
         try readerConnectionPool.execute { connection in
             // jmj - added transaction
-            try connection.transaction(transactionType: transactionType) {
+            if transactionType == .context {
                 try closure(connection)
+            } else {
+                try connection.transaction(transactionType: transactionType) {
+                    try closure(connection)
+                }
             }
         }
     }
@@ -156,8 +167,12 @@ open class Database {
     public func executeWrite(_ transactionType: Connection.TransactionType = .deferred, closure: (Connection) throws -> Void) throws {
         try writerConnectionQueue.execute { connection in
             // jmj - added transaction
-            try connection.transaction(transactionType: transactionType) {
+            if transactionType == .context {
                 try closure(connection)
+            } else {
+                try connection.transaction(transactionType: transactionType) {
+                    try closure(connection)
+                }
             }
         }
     }

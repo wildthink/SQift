@@ -25,6 +25,7 @@ extension Connection {
         case deferred = "DEFERRED"
         case immediate = "IMMEDIATE"
         case exclusive = "EXCLUSIVE"
+        case context = "CONTEXT" // means NO NEW Transaction is created
     }
 
     // MARK: - Transactions
