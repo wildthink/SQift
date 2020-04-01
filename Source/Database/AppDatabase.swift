@@ -12,7 +12,22 @@ open class AppDatabase: Database {
     
     public static var shared: AppDatabase! = try? AppDatabase()
     
-//    public init()
+    var attachedDatabases: [String:StorageLocation] = [:]
+    
+    public func attachDatabase(from storageLocation: StorageLocation, withName name: String) throws {
+        try executeWrite { (c) in
+            try c.attachDatabase(from: storageLocation, withName: name)
+        }
+        attachedDatabases[name] = storageLocation
+    }
+
+    public func detachDatabase(named name: String) throws {
+        try executeWrite { (c) in
+            try c.detachDatabase(named: name)
+        }
+        attachedDatabases.removeValue(forKey: name)
+    }
+
     public func execute(contentsOfFile file: String) throws {
         let sql = try String(contentsOfFile: file)
         try executeWrite {
@@ -87,16 +102,16 @@ open class AppDatabase: Database {
     
     func set(_ key: String, in table: String, to value: Any) throws {
         try executeWrite {
-            let q_value = sql_quote(value)
-            let sql = """
+            let q_value = (value as? Bindable) ?? sql_quote(value)
+            let sql: SQL = """
                 INSERT INTO \(table) (key,value)
-                SELECT \(key), \(q_value)
-                WHERE NOT EXISTS(SELECT 1 FROM \(table) WHERE key = \(key);
+                SELECT key, value
+                WHERE NOT EXISTS(SELECT 1 FROM \(table) WHERE key = '\(key)';
             
-                UPDATE \(table) SET key = \(key), value = \(q_value)
-                WHERE NOT (key = \(key) AND value = \(q_value))
+                UPDATE \(table) SET key = \(key), value = ?
+                WHERE NOT (key = '\(key)' AND value = ?)
             """
-            try $0.execute(sql)
+            try $0.prepare(sql, [q_value, q_value]).run()
         }
     }
     
@@ -110,7 +125,7 @@ open class AppDatabase: Database {
     
     public func update(_ table: String, with keyvalues: [String:Bindable?]) throws {
         try executeWrite {
-            try $0.update(table: table, with: keyvalues)
+            try $0.update(table: table, with: keyvalues as [String:Any])
         }
     }
 
