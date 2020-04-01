@@ -106,7 +106,7 @@ open class AppDatabase: Database {
             let sql: SQL = """
                 INSERT INTO \(table) (key,value)
                 SELECT key, value
-                WHERE NOT EXISTS(SELECT 1 FROM \(table) WHERE key = '\(key)';
+                WHERE NOT EXISTS (SELECT 1 FROM \(table) WHERE key = '\(key)');
             
                 UPDATE \(table) SET key = \(key), value = ?
                 WHERE NOT (key = '\(key)' AND value = ?)
