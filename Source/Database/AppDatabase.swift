@@ -78,49 +78,40 @@ open class AppDatabase: Database {
             }
             try $0.execute("""
                 CREATE TABLE IF NOT EXISTS \(table) (
-                    key TEXT PRIMARY KEY,
+                    id INTEGER PRIMARY KEY,
                     tag TEXT,
+                    key TEXT UNIQUE,
                     value BLOB
                 )
             """)
         }
     }
-    
-    /*
-     INSERT INTO memos(id,text)
-     SELECT 5, 'text to insert'
-     WHERE NOT EXISTS(SELECT 1 FROM memos WHERE id = 5 AND text = 'text to insert');
-     */
-    
-    public func set(env: String, to value: Any) throws {
+        
+    public func set(env: String, to value: Bindable) throws {
         try set(env, in: applicationEnvTable, to: value)
     }
     
-    public func get(env: String) -> Any? {
-        get (env, in: applicationEnvTable)
+    public func get(env: String, default other: Any? = nil) -> Any? {
+        (try? get (env, in: applicationEnvTable)) ?? other
     }
     
-    func set(_ key: String, in table: String, to value: Any) throws {
+    func set(_ key: String, in table: String, to value: Bindable) throws {
         try executeWrite {
-            let q_value = (value as? Bindable) ?? sql_quote(value)
-            let sql: SQL = """
-                INSERT INTO \(table) (key,value)
-                SELECT key, value
-                WHERE NOT EXISTS (SELECT 1 FROM \(table) WHERE key = '\(key)');
-            
-                UPDATE \(table) SET key = \(key), value = ?
-                WHERE NOT (key = '\(key)' AND value = ?)
+            let sql: SQL =
             """
-            try $0.prepare(sql, [q_value, q_value]).run()
+                INSERT INTO \(table) (key, value) VALUES(? ,?)
+                ON CONFLICT(key) DO UPDATE SET value = ?
+            """
+            try $0.prepare(sql, key, value, value).run()
         }
     }
     
-    func get(_ key: String, in table: String) -> Any? {
-        var value: Any?
-        try? executeRead {
-            value = try $0.query("SELECT value FROM \(applicationEnvTable) WHERE key = ?", [key])
+    func get(_ key: String, in table: String) throws -> Any? {
+        var row: Row?
+        try executeRead {
+            row = try $0.query("SELECT value FROM \(applicationEnvTable) WHERE key = ?", [key])
         }
-        return value
+        return row?.value(at: 0)
     }
     
     public func update(_ table: String, with keyvalues: [String:Bindable?]) throws {

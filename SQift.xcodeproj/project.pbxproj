@@ -202,6 +202,8 @@
 		4C7EC8D020462706000FC1EF /* TableLockPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7EC8CD20462706000FC1EF /* TableLockPolicyTests.swift */; };
 		4CA8C2291BF6A49400822606 /* SQift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA8C21E1BF6A49400822606 /* SQift.framework */; };
 		967C8435241B3AA20019074F /* AppDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967C8434241B3AA20019074F /* AppDatabase.swift */; };
+		9684C209243547D800165C0F /* AppDatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9684C208243547D800165C0F /* AppDatabaseTests.swift */; };
+		9684C20A243547D800165C0F /* AppDatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9684C208243547D800165C0F /* AppDatabaseTests.swift */; };
 		968C531724236E5700DEF82D /* AppDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967C8434241B3AA20019074F /* AppDatabase.swift */; };
 		968C531824236E5900DEF82D /* AppDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967C8434241B3AA20019074F /* AppDatabase.swift */; };
 		968C531924236E5B00DEF82D /* AppDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967C8434241B3AA20019074F /* AppDatabase.swift */; };
@@ -309,6 +311,7 @@
 		4CD9E069207C47FB00D02902 /* .travis.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
 		4CE5E8681F59E88E00D47037 /* SQift.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = SQift.podspec; sourceTree = "<group>"; };
 		967C8434241B3AA20019074F /* AppDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDatabase.swift; sourceTree = "<group>"; };
+		9684C208243547D800165C0F /* AppDatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDatabaseTests.swift; sourceTree = "<group>"; };
 		96D77F5F241D87B5004D4DB8 /* SQift 4.0 Migration Guide.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = "SQift 4.0 Migration Guide.md"; sourceTree = "<group>"; };
 		96F02457241485700067A6C0 /* AnyCodable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnyCodable.swift; sourceTree = "<group>"; };
 		96FE2EE3242706FE00A59C38 /* Updates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Updates.swift; sourceTree = "<group>"; };
@@ -512,6 +515,7 @@
 		4C6121331F58BBCE00C289C0 /* Database */ = {
 			isa = PBXGroup;
 			children = (
+				9684C208243547D800165C0F /* AppDatabaseTests.swift */,
 				4C6121341F58BBCE00C289C0 /* DatabaseTests.swift */,
 				4C6121351F58BBCE00C289C0 /* MigratorTests.swift */,
 				4C7EC8CD20462706000FC1EF /* TableLockPolicyTests.swift */,
@@ -1014,6 +1018,7 @@
 				4C6121581F58BBE400C289C0 /* TransactionTests.swift in Sources */,
 				4C34E4441F58D990006FE2CC /* CheckpointTests.swift in Sources */,
 				4C6121521F58BBE400C289C0 /* ConnectionQueueTests.swift in Sources */,
+				9684C20A243547D800165C0F /* AppDatabaseTests.swift in Sources */,
 				4C7EC8CF20462706000FC1EF /* TableLockPolicyTests.swift in Sources */,
 				4C61215A1F58BBE400C289C0 /* MigratorTests.swift in Sources */,
 				4C34E4361F58D8EA006FE2CC /* StatementTests.swift in Sources */,
@@ -1181,6 +1186,7 @@
 				4C6121481F58BBE300C289C0 /* TransactionTests.swift in Sources */,
 				4C34E4451F58D990006FE2CC /* CheckpointTests.swift in Sources */,
 				4C6121421F58BBE300C289C0 /* ConnectionQueueTests.swift in Sources */,
+				9684C209243547D800165C0F /* AppDatabaseTests.swift in Sources */,
 				4C7EC8CE20462706000FC1EF /* TableLockPolicyTests.swift in Sources */,
 				4C61214A1F58BBE300C289C0 /* MigratorTests.swift in Sources */,
 				4C34E4381F58D8EA006FE2CC /* StatementTests.swift in Sources */,
