@@ -29,9 +29,11 @@ SQift is a lightweight Swift wrapper for SQLite.
 ## WildThink Extensions
 
 - [X] Shared Memory Option
-- [ ] JSON Support
-- [ ] AppDatabase
-- [ ] Database Snapshots
+- [X] JSON Support
+- [X ] AppDatabase
+- [ ]  Enable Database Snapshots
+- [ ] Apply shared database `hooks` to each Connection used
+- [ ] Apply custom database functions to each Connection used
 
 ## Requirements
 

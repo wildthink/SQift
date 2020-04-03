@@ -8,11 +8,37 @@
 
 import Foundation
 
-open class AppDatabase: Database {
+open class AppDatabase {
     
     public static var shared: AppDatabase! = try? AppDatabase()
     
     var attachedDatabases: [String:StorageLocation] = [:]
+    let queue: ConnectionQueue
+    let connection: Connection
+    
+    public init(_ storageLocation: StorageLocation = .sharedMemory(":shared:")) throws {
+        connection = try Connection(storageLocation: storageLocation,
+                                       tableLockPolicy: .fastFail, readOnly: false,
+                                       multiThreaded: true, sharedCache: false)
+        queue = ConnectionQueue(connection: connection)
+    }
+    
+    public func executeRead(_ transactionType: Connection.TransactionType = .deferred, closure: (Connection) throws -> Void) throws {
+        try queue.executeInTransaction(transactionType: transactionType) {
+            try closure($0)
+        }
+    }
+
+    /// Executes the specified closure on the writer connection queue.
+    ///
+    /// - Parameter closure: The closure to execute.
+    ///
+    /// - Throws: A `SQLiteError` if SQLite encounters an error executing the closure.
+    public func executeWrite(_ transactionType: Connection.TransactionType = .deferred, closure: (Connection) throws -> Void) throws {
+        try queue.executeInTransaction(transactionType: transactionType) {
+             try closure($0)
+        }
+    }
     
     public func attachDatabase(from storageLocation: StorageLocation, withName name: String) throws {
         try executeWrite { (c) in
@@ -45,7 +71,7 @@ open class AppDatabase: Database {
     public func execute(resource name: String, in bundle: Bundle?) throws {
         let bundle = bundle ?? Bundle.main
         guard let path = bundle.path(forResource: name, ofType: "sql")
-        else { throw Database.DBError.invalidFile }
+            else { return } //throw Database.DBError.invalidFile }
         
         let sql = try String(contentsOfFile: path)
         try executeWrite {

@@ -22,7 +22,7 @@ class AppDatabaseTests: BaseTestCase {
     }
 
     func testAppDatabaseAppTables() throws {
-        let db = try AppDatabase(storageLocation: .onDisk("/Users/jason/test.db"))
+        let db = try AppDatabase(.onDisk("/Users/jason/test.db"))
         try db.createApplicationDatabase(reset: true)
         
         try db.set(env: "select.any", to: "abc")
