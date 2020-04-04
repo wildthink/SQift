@@ -3,7 +3,7 @@
 //  SQift iOS
 //
 //  Created by Jason Jobe on 3/21/20.
-//  Copyright © 2020 Nike. All rights reserved.
+//  Copyright © 2020 WildThink, LLC. All rights reserved.
 //
 
 import Foundation

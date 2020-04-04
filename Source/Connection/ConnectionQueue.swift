@@ -28,7 +28,7 @@ public class ConnectionQueue {
     public init(connection: Connection) {
         self.connection = connection
         self.id = UUID().uuidString
-        self.queue = DispatchQueue(label: "com.nike.sqift.connection-queue-\(id)")
+        self.queue = DispatchQueue(label: "com.wildthink.sqift.connection-queue-\(id)")
     }
 
     // MARK: - Execution

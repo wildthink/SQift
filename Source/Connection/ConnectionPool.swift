@@ -69,7 +69,7 @@ public class ConnectionPool {
         self.connectionPreparation = connectionPreparation
 
         self.flags = SQLITE_OPEN_READONLY | SQLITE_OPEN_NOMUTEX | SQLITE_OPEN_SHAREDCACHE
-        self.queue = DispatchQueue(label: "com.nike.sqift.connection-pool-\(UUID().uuidString)")
+        self.queue = DispatchQueue(label: "com.wildthink.sqift.connection-pool-\(UUID().uuidString)")
 
         self.availableConnections = []
         self.busyConnections = []
