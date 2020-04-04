@@ -413,6 +413,7 @@
 				4C6120801F58BAD500C289C0 /* ConnectionPool.swift */,
 				4C6120811F58BAD500C289C0 /* ConnectionQueue.swift */,
 				4C34E4301F58D8B4006FE2CC /* Statement.swift */,
+				966015C4243814BC00A0BF67 /* SQiftExtensions.swift */,
 				4C6120821F58BAD500C289C0 /* Functions */,
 			);
 			path = Connection;
@@ -491,7 +492,6 @@
 		4C6121291F58BBCE00C289C0 /* Connection */ = {
 			isa = PBXGroup;
 			children = (
-				966015C4243814BC00A0BF67 /* SQiftExtensions.swift */,
 				4C61212A1F58BBCE00C289C0 /* ConnectionPoolTests.swift */,
 				4C61212B1F58BBCE00C289C0 /* ConnectionQueueTests.swift */,
 				4C61212C1F58BBCE00C289C0 /* ConnectionTests.swift */,
