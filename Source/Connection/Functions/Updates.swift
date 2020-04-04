@@ -8,6 +8,24 @@
 
 import Foundation
 
+extension Database {
+    public struct DBError: Error, CustomStringConvertible {
+        public var description: String
+        
+        public init (description msg: String) {
+            description = msg
+        }
+        public init (_ msg: String) {
+            description = msg
+        }
+
+        static var inMemoryInvalidOption = DBError("DBERROR: The .inMemory StorageLocation is not valid when using multiple Connections" )
+        
+        static var invalidFile = DBError("DBERROR: File NOT found" )
+
+    }
+}
+
 extension Connection {
     
     /// This `insert` method is useful when it is desirable to insert  values

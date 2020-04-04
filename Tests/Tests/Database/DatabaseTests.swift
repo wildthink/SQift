@@ -126,7 +126,7 @@ class DatabaseTestCase: BaseTestCase {
             }
         )
 
-        try database.executeWrite(.context) { connection in
+        try database.executeWrite { connection in
             try connection.execute("""
                 CREATE TABLE person(id INTEGER PRIMARY KEY, first_name TEXT NOT NULL, last_name TEXT NOT NULL)
                 """

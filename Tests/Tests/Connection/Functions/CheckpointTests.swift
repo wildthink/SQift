@@ -99,7 +99,7 @@ class CheckpointTestCase: BaseConnectionTestCase {
 
         DispatchQueue.utility.asyncAfter(seconds: 0.01) {
             do {
-                _ = try self.connection.checkpoint(mode: .truncate)
+                _ = try self.connection?.checkpoint(mode: .truncate)
             } catch {
                 checkpointError = error
             }

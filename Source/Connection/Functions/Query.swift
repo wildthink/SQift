@@ -642,8 +642,8 @@ extension Connection {
         try statement.fetch(body)
     }
     
-    public func rowids(for table: String, where test: String? = nil) throws -> [Int64] {
-        var sql = "SELECT ROWID FROM \(table)"
+    public func rowids(_ col: String = "ROWID", for table: String, where test: String? = nil) throws -> [Int64] {
+        var sql = "SELECT \(col) FROM \(table)"
         if let test = test {
             sql += " WHERE \(test)"
         }
