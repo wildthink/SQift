@@ -201,6 +201,10 @@
 		4C7EC8CF20462706000FC1EF /* TableLockPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7EC8CD20462706000FC1EF /* TableLockPolicyTests.swift */; };
 		4C7EC8D020462706000FC1EF /* TableLockPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7EC8CD20462706000FC1EF /* TableLockPolicyTests.swift */; };
 		4CA8C2291BF6A49400822606 /* SQift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4CA8C21E1BF6A49400822606 /* SQift.framework */; };
+		966015C5243814BC00A0BF67 /* SQiftExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966015C4243814BC00A0BF67 /* SQiftExtensions.swift */; };
+		966015C6243814BC00A0BF67 /* SQiftExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966015C4243814BC00A0BF67 /* SQiftExtensions.swift */; };
+		966015C7243814BC00A0BF67 /* SQiftExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966015C4243814BC00A0BF67 /* SQiftExtensions.swift */; };
+		966015C8243814BC00A0BF67 /* SQiftExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 966015C4243814BC00A0BF67 /* SQiftExtensions.swift */; };
 		967C8435241B3AA20019074F /* AppDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967C8434241B3AA20019074F /* AppDatabase.swift */; };
 		9684C209243547D800165C0F /* AppDatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9684C208243547D800165C0F /* AppDatabaseTests.swift */; };
 		9684C20A243547D800165C0F /* AppDatabaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9684C208243547D800165C0F /* AppDatabaseTests.swift */; };
@@ -310,6 +314,7 @@
 		4CB1AE431FA1169000976A5C /* NOTICE */ = {isa = PBXFileReference; lastKnownFileType = text; path = NOTICE; sourceTree = "<group>"; };
 		4CD9E069207C47FB00D02902 /* .travis.yml */ = {isa = PBXFileReference; lastKnownFileType = text; path = .travis.yml; sourceTree = "<group>"; };
 		4CE5E8681F59E88E00D47037 /* SQift.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = SQift.podspec; sourceTree = "<group>"; };
+		966015C4243814BC00A0BF67 /* SQiftExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQiftExtensions.swift; sourceTree = "<group>"; };
 		967C8434241B3AA20019074F /* AppDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDatabase.swift; sourceTree = "<group>"; };
 		9684C208243547D800165C0F /* AppDatabaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDatabaseTests.swift; sourceTree = "<group>"; };
 		96D77F5F241D87B5004D4DB8 /* SQift 4.0 Migration Guide.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = "SQift 4.0 Migration Guide.md"; sourceTree = "<group>"; };
@@ -486,6 +491,7 @@
 		4C6121291F58BBCE00C289C0 /* Connection */ = {
 			isa = PBXGroup;
 			children = (
+				966015C4243814BC00A0BF67 /* SQiftExtensions.swift */,
 				4C61212A1F58BBCE00C289C0 /* ConnectionPoolTests.swift */,
 				4C61212B1F58BBCE00C289C0 /* ConnectionQueueTests.swift */,
 				4C61212C1F58BBCE00C289C0 /* ConnectionTests.swift */,
@@ -990,6 +996,7 @@
 				96F02459241485700067A6C0 /* AnyCodable.swift in Sources */,
 				4C6120E21F58BB5200C289C0 /* Query.swift in Sources */,
 				96FE2EE524270E7400A59C38 /* Updates.swift in Sources */,
+				966015C6243814BC00A0BF67 /* SQiftExtensions.swift in Sources */,
 				4C34E45F1F58DA79006FE2CC /* Backup.swift in Sources */,
 				4C6120EC1F58BB5200C289C0 /* Row.swift in Sources */,
 				4C6120E11F58BB5200C289C0 /* Function.swift in Sources */,
@@ -1058,6 +1065,7 @@
 				96F0245A241485700067A6C0 /* AnyCodable.swift in Sources */,
 				4C6120F21F58BB5200C289C0 /* Query.swift in Sources */,
 				96FE2EE624270E7600A59C38 /* Updates.swift in Sources */,
+				966015C7243814BC00A0BF67 /* SQiftExtensions.swift in Sources */,
 				4C34E4601F58DA79006FE2CC /* Backup.swift in Sources */,
 				4C6120FC1F58BB5200C289C0 /* Row.swift in Sources */,
 				4C6120F11F58BB5200C289C0 /* Function.swift in Sources */,
@@ -1125,6 +1133,7 @@
 				96F0245B241485700067A6C0 /* AnyCodable.swift in Sources */,
 				4C6121021F58BB5300C289C0 /* Query.swift in Sources */,
 				96FE2EE724270E7700A59C38 /* Updates.swift in Sources */,
+				966015C8243814BC00A0BF67 /* SQiftExtensions.swift in Sources */,
 				4C34E45E1F58DA79006FE2CC /* Backup.swift in Sources */,
 				4C61210C1F58BB5300C289C0 /* Row.swift in Sources */,
 				4C6121011F58BB5300C289C0 /* Function.swift in Sources */,
@@ -1158,6 +1167,7 @@
 				96F02458241485700067A6C0 /* AnyCodable.swift in Sources */,
 				4C6120D21F58BB5100C289C0 /* Query.swift in Sources */,
 				96FE2EE4242706FE00A59C38 /* Updates.swift in Sources */,
+				966015C5243814BC00A0BF67 /* SQiftExtensions.swift in Sources */,
 				4C34E45D1F58DA79006FE2CC /* Backup.swift in Sources */,
 				4C6120DC1F58BB5100C289C0 /* Row.swift in Sources */,
 				4C6120D11F58BB5100C289C0 /* Function.swift in Sources */,
