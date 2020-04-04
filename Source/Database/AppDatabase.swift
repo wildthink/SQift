@@ -12,9 +12,9 @@ open class AppDatabase {
     
     public static var shared: AppDatabase! = try? AppDatabase()
     
-    var attachedDatabases: [String:StorageLocation] = [:]
-    let queue: ConnectionQueue
-    let connection: Connection
+    public private(set) var attachedDatabases: [String:StorageLocation] = [:]
+    public let queue: ConnectionQueue
+    public let connection: Connection
     
     public init(_ storageLocation: StorageLocation = .sharedMemory(":shared:")) throws {
         connection = try Connection(storageLocation: storageLocation,
